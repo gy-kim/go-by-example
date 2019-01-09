@@ -1,0 +1,48 @@
+package main
+
+/*
+Closing a channel indicates that no more values will be
+sent on it. This can be useful to communcate completion
+to the channel's receivers
+
+In this example we'll use a jobs channel to communucate
+work to be done from the main() goroutine to a worker
+goroutine. When we have no more jobs for the worker
+we'll close the jobs channel.
+
+Here's the worker goroutine. It repeatedly receives from
+jobs with j, more := <- jobs. In this special 2-value
+from of receive, the more value will be false if jobs has
+been closed and all values in the channel have already
+been received. We use this to notify on done when we've
+worked all our jobs.
+*/
+
+import "fmt"
+
+func main() {
+	jobs := make(chan int, 5)
+	done := make(chan bool)
+
+	go func() {
+		for {
+			j, more := <-jobs
+			if more {
+				fmt.Println("received job", j, more)
+			} else {
+				fmt.Println("received all jobs")
+				done <- true
+				return
+			}
+		}
+	}()
+
+	for j := 1; j <= 3; j++ {
+		jobs <- j
+		fmt.Println("sent job", j)
+	}
+	close(jobs)
+	fmt.Println("sent all jobs")
+
+	<-done
+}
