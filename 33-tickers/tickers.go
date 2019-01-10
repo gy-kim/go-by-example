@@ -14,6 +14,9 @@ channel to iterate over the values as they arrive every
 Tickers can be stopped like timers. Once a ticker is
 stopped it won't receive any more values on its channel.
 We'll stop ours after 1600ms.
+
+When we run this program the ticker should tick 3 times
+before we stop it.
 */
 
 import (
