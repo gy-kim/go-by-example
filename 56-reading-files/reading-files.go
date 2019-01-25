@@ -100,6 +100,6 @@ func main() {
 
 	/*
 		$ echo "hello" > /tmp/dat
-		$ echo "go" > /tmp/dat
+		$ echo "go" >> /tmp/dat
 	*/
 }
